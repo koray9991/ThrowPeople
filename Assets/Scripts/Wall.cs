@@ -4,20 +4,14 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
-    public Material[] mats;
-    public bool inside;
     
 
-    
-    void Update()
+    public void Active()
     {
-        if (inside)
-        {
-            GetComponent<MeshRenderer>().material = mats[1];
-        }
-        else
-        {
-            GetComponent<MeshRenderer>().material = mats[0];
-        }
+        GetComponent<MeshRenderer>().enabled = true;
+    }
+   public void Disactive()
+    {
+        GetComponent<MeshRenderer>().enabled = false;
     }
 }

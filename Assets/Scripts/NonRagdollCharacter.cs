@@ -13,12 +13,37 @@ public class NonRagdollCharacter : MonoBehaviour
     public ParticleSystem ps;
     float timer;
     float maxTime;
+    public bool isInside;
+    public static NonRagdollCharacter instance;
+    public bool throwing;
+    public float throwAnimationTime;
+    float throwTimer;
+    public float busTransform;
+    private void Awake()
+    {
+        if (instance == null) { instance = this; }
+    }
     void Start()
     {
         maxTime = Random.Range(4f, 8f);
     }
 
-    // Update is called once per frame
+    private void Update()
+    {
+        if (throwing)
+        {
+            Speed = 0;
+            transform.rotation = Quaternion.Euler(0,0,0);
+            anim.SetInteger("movement", 2);
+            throwTimer += Time.deltaTime;
+            if (throwTimer>throwAnimationTime)
+            {
+                throwing = false;
+                
+               
+            }
+        }
+    }
     void FixedUpdate()
     {
         timer+= Time.deltaTime;
@@ -29,18 +54,27 @@ public class NonRagdollCharacter : MonoBehaviour
             ps.Play();
         }
 
-
+        
         rb.velocity = Vector3.zero;
-        if (Input.GetMouseButton(0))
+       
+
+
+       
+        if (!throwing)
         {
-            JoystickMovement();
-            anim.SetInteger("movement", 1);
-            rb.isKinematic = false;
-        }
-        else
-        {
-            anim.SetInteger("movement", 0);
-            rb.isKinematic = true;
+            Speed = 5;
+            throwTimer = 0;
+            if (Input.GetMouseButton(0))
+            {
+                JoystickMovement();
+                anim.SetInteger("movement", 1);
+                rb.isKinematic = false;
+            }
+            else
+            {
+                anim.SetInteger("movement", 0);
+                rb.isKinematic = true;
+            }
         }
     }
     public void JoystickMovement()
@@ -57,6 +91,29 @@ public class NonRagdollCharacter : MonoBehaviour
         }
        
     }
-    
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "HomeInside")
+        {
+            isInside = true;
+            GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
+            for (int i = 0; i < walls.Length; i++)
+            {
+                walls[i].GetComponent<Wall>().Disactive();
+            }
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "HomeInside")
+        {
+            isInside = false;
+            GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
+            for (int i = 0; i < walls.Length; i++)
+            {
+                walls[i].GetComponent<Wall>().Active();
+            }
+        }
+    }
 }
 

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     float finishTimer;
     public GameObject winPanel;
     public TextMeshProUGUI stateText;
+    public GameObject confetti1, confetti2;
     private void Awake()
     {
         if (instance == null) { instance = this; }
@@ -57,6 +58,8 @@ public class GameManager : MonoBehaviour
                 {
                     students[i].GetComponent<Hip>().Parent.SetActive(false);
                 }
+                confetti1.SetActive(true);
+                confetti2.SetActive(true);
             }
             if (finishTimer > 4)
             {
@@ -70,17 +73,17 @@ public class GameManager : MonoBehaviour
     {
         if (ButtonNo == 1)
         {
-            //if (SceneManager.GetActiveScene().buildIndex == 2)
-            //{
-            //    SceneManager.LoadScene(0);
-            //}
-            //else
-            //{
-            //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
-            //}
-            
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            
+            if (SceneManager.GetActiveScene().buildIndex == 2)
+            {
+                SceneManager.LoadScene(0);
+            }
+            else
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
+
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
         }
     }
 }

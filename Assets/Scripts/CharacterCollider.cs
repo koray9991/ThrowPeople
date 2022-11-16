@@ -14,12 +14,25 @@ public class CharacterCollider : MonoBehaviour
     public float throwForceY, throwForceZ ;
     public Transform busTransform;
     public GameObject rightHip, leftHip;
+    float arrowTimer;
+    public GameObject arrowObject;
     private void Awake()
     {
         if (instance == null) { instance = this; }
     }
+    private void Update()
+    {
+        arrowTimer += Time.deltaTime;
+        if(arrowTimer>7 && !arrowObject.activeSelf)
+        {
+            arrowObject.SetActive(true);
+        }
+        if(arrowTimer<7 && arrowObject)
+        {
+            arrowObject.SetActive(false);
+        }
+    }
 
-   
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Student" && (!right || !left) && !other.GetComponent<Hip>().inside)
@@ -27,7 +40,7 @@ public class CharacterCollider : MonoBehaviour
             other.GetComponent<Hip>().Parent.GetComponent<Animator>().enabled = false;
             other.GetComponent<CapsuleCollider>().enabled = false;
             other.gameObject.layer = 9;
-
+            arrowTimer = 0;
             other.GetComponent<Hip>().Parent.GetComponent<Student>().state = 2;
             var children = other.GetComponent<Hip>().Parent.GetComponentsInChildren<Transform>(includeInactive: true);
             foreach (var child in children)
@@ -55,6 +68,13 @@ public class CharacterCollider : MonoBehaviour
         }
         if (other.tag == "ThrowArea")
         {
+            if((leftObject!=null || rightObject != null)&& !NonRagdollCharacter.instance.throwing)
+            {
+                NonRagdollCharacter.instance.throwing = true;
+                arrowTimer = 0;
+
+            }
+            
             if (leftObject != null)
             {
                 

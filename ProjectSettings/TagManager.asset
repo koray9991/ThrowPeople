@@ -8,6 +8,13 @@ TagManager:
   - ThrowArea
   - StudentPelvis
   - BusInside
+  - Money
+  - HomeInside
+  - Wall
+  - Arrow
+  - Level1
+  - Level2
+  - Level3
   layers:
   - Default
   - TransparentFX
@@ -19,7 +26,7 @@ TagManager:
   - 
   - Character
   - Holded
-  - 
+  - Wall
   - 
   - 
   - 

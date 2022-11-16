@@ -9,15 +9,40 @@ public class Student : MonoBehaviour
     public float timer;
     public float randomTime;
     public GameObject rig;
-   
+    public GameObject[] goToTransform;
+    public float moveSpeed;
+    int goToInteger;
+    public GameObject arrow;
     private void Start()
     {
         randomTime = Random.Range(4f, 8f);
     }
     private void FixedUpdate()
     {
-        
-
+        if (goToTransform.Length != 0 && GetComponent<Animator>().enabled)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, goToTransform[goToInteger].transform.position, moveSpeed/100);
+            transform.LookAt(goToTransform[goToInteger].transform);
+            if(Vector3.Distance(transform.position, goToTransform[goToInteger].transform.position) < 0.3f)
+            {
+                if (goToTransform.Length == goToInteger + 1)
+                {
+                    goToInteger = 0;
+                }
+                else
+                {
+                    goToInteger += 1;
+                }
+               
+            }
+        }
+        if (state == 2 && arrow != null)
+        {
+            if (arrow.activeSelf)
+            {
+                arrow.SetActive(false);
+            }
+        }
 
 
         timer += Time.deltaTime;
