@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
@@ -12,9 +13,13 @@ public class GameManager : MonoBehaviour
     public bool winBool;
     float timer;
     float finishTimer;
-    public GameObject winPanel;
+    public GameObject winPanel,failPanel;
     public TextMeshProUGUI stateText;
     public GameObject confetti1, confetti2;
+    public float maxTime;
+    public float gameTime;
+    public Image timeBar;
+    public bool fail;
     private void Awake()
     {
         if (instance == null) { instance = this; }
@@ -22,7 +27,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Time.timeScale = 1;
-        
+        gameTime = maxTime;
+        timeBar.fillAmount = gameTime / maxTime;
         students = GameObject.FindGameObjectsWithTag("Student");
         maxCount = students.Length;
         stateText.text = insideCount + " / " + maxCount;
@@ -31,6 +37,15 @@ public class GameManager : MonoBehaviour
    
     void Update()
     {
+        gameTime -= Time.deltaTime;
+        timeBar.fillAmount = gameTime / maxTime;
+        if (gameTime <= 0)
+        {
+            fail = true;
+            failPanel.SetActive(true);
+            Time.timeScale = 0;
+        }
+
         timer += Time.deltaTime;
         if (timer > 0.5f)
         {
@@ -83,6 +98,13 @@ public class GameManager : MonoBehaviour
             }
 
             //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        }
+        if (ButtonNo == 2)
+        {
+           
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
         }
     }
